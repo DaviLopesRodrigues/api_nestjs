@@ -1,13 +1,11 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import { UserModule } from './user/user.module';
 
-//O Module (app.module.ts) é um conceito do Nest que consistem em separar a aplicação em pequenos módulos
-//Resumidamente é como se fosse um agrupador de recursos (geralmente controllers e services)
-//É possivel importar módulos de terceiros (imports: []) e exportar módulos para a outros módulos da aplicação (exports: [])
+
+//Importação do módulo criado no app.module que é responsável por carregar todos os módulos da aplicação
 @Module({
-  imports: [],
-  controllers: [AppController],
-  providers: [AppService],
+  imports: [UserModule],
+  controllers: [],
+  providers: [],
 })
 export class AppModule {}
