@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   Patch,
@@ -57,5 +58,13 @@ export class UserController {
   //Param -> Recuperação do paramâmetro enviado na URL da requisição (identificar recurso específico)
   updatePartial(@Body() body, @Param('id') param) {
     return { user: {} };
+  }
+
+  //Delete -> Deletar usuário do banco
+  // Obs -> O '/:id' que será necessário informar na requisição é o id do usuário pesquisado
+  @Delete(':id')
+  //Param -> Recuperação do paramâmetro enviado na URL da requisição (identificar recurso específico)
+  delete(@Param('id') param) {
+    return { id: param };
   }
 }
