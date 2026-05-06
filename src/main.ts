@@ -8,6 +8,9 @@ async function bootstrap() {
 
   app.useGlobalPipes(new ValidationPipe());
 
+  //Fechar conexão com o Banco de Dados após realizar operações
+  app.enableShutdownHooks();
+
   await app.listen(process.env.PORT ?? 3000);
 }
 bootstrap();

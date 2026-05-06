@@ -1,0 +1,21 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+//O provicer recebe o Banco de Dados que a aplicação usará
+datasource db {
+  provider = "mysql"
+}
+
+//No Prisma, o estrutura das tabelas são representadas pelo model (uma classe por baixo dos panos)
+//Por padrão o nome dos models é o nome da tabela, para apelidar o model basta usar o @@map("tb_users")
+model User {
+  id         Int      @id @default(autoincrement()) @db.UnsignedInt
+  name       String   @db.VarChar(63)
+  email      String   @db.VarChar(127)
+  password   String   @db.VarChar(127)
+  created_at DateTime @default(now()) @db.Timestamp(0)
+  updated_at DateTime @default(now()) @db.Timestamp(0)
+
+  @@map("tb_users")
+}
