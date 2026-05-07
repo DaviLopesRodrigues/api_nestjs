@@ -15,13 +15,15 @@ import {
   UpdatePatchUserInputDTO,
   UpdatePutUserInputDTO,
 } from './dto/input/update-user.input.dto';
+import { UserService } from './user.service';
 
 @Controller('users')
 export class UserController {
+  constructor(private readonly userService: UserService) {}
+
   @Post()
   create(@Body() body: CreateUserInputDTO) {
-    const { name, email, password } = body;
-    return { name, email, password };
+    return this.userService.create(body);
   }
 
   @Get()
@@ -30,7 +32,6 @@ export class UserController {
   }
 
   @Get(':id')
-
   findOne(@Param('id', ParseIntPipe) id: number) {
     return { user: {}, id };
   }
