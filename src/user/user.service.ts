@@ -16,4 +16,18 @@ export class UserService {
 
     return user;
   }
+
+  //Método responsável por listar todos usuários.
+  async findAll() {
+    return this.prismaService.user.findMany();
+  }
+
+  //Método responsável por listar único usuário.
+  async findOne(id: number) {
+    return this.prismaService.user.findUnique({
+      where: {
+        id
+      },
+    });
+  }
 }

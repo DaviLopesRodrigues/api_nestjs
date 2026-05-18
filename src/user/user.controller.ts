@@ -28,12 +28,12 @@ export class UserController {
 
   @Get()
   findAll() {
-    return { users: [] };
+    return this.userService.findAll();
   }
 
   @Get(':id')
   findOne(@Param('id', ParseIntPipe) id: number) {
-    return { user: {}, id };
+    return this.userService.findOne(id)
   }
 
   @Get()
