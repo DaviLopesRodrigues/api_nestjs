@@ -1,6 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { CreateUserInputDTO } from './dto/input/create-user.input.dto';
 import { PrismaService } from '@/prisma/prisma.service';
+import {
+  UpdatePatchUserInputDTO,
+  UpdatePutUserInputDTO,
+} from './dto/input/update-user.input.dto';
 
 //O service é responsável por se conectar com Banco de Dados e realizar as operações
 @Injectable()
@@ -26,8 +30,35 @@ export class UserService {
   async findOne(id: number) {
     return this.prismaService.user.findUnique({
       where: {
-        id
+        id,
       },
+    });
+  }
+
+  //Método responsável por alterar todas informações de um usuário
+  async update(id: number, data: UpdatePutUserInputDTO) {
+
+    return this.prismaService.user.update({
+      where: {
+        id: id,
+      },
+      data: {
+        name: data.name,
+        email: data.email,
+        password: data.password,
+        //Como a prop birthdate é opcional, quando não vier será salva como null no banco (boa prática)
+        birthdate: data.birthdate ? data.birthdate : null,
+      },
+    });
+  }
+
+  //Método responsável por alterar informações específicas de um usuário
+  async updatePartial(id: number, data: UpdatePatchUserInputDTO) {
+    return this.prismaService.user.update({
+      where: {
+        id: id,
+      },
+      data,
     });
   }
 }

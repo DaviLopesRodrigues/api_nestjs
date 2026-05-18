@@ -1,8 +1,10 @@
 import {
+  IsDateString,
   IsEmail,
   IsOptional,
   IsString,
   IsStrongPassword,
+  MinLength,
 } from 'class-validator';
 
 export class UpdatePutUserInputDTO {
@@ -12,12 +14,12 @@ export class UpdatePutUserInputDTO {
   @IsEmail()
   email: string;
 
-  @IsStrongPassword({
-    minLength: 6,
-    minUppercase: 1,
-    minLowercase: 1,
-  })
+  @IsString()
+  @MinLength(6)
   password: string;
+
+  @IsDateString()
+  birthdate: string;
 }
 
 export class UpdatePatchUserInputDTO {
@@ -30,10 +32,11 @@ export class UpdatePatchUserInputDTO {
   email?: string;
 
   @IsOptional()
-  @IsStrongPassword({
-    minLength: 6,
-    minUppercase: 1,
-    minLowercase: 1,
-  })
+  @IsString()
+  @MinLength(6)
   password?: string;
+
+  @IsOptional()
+  @IsDateString()
+  birthdate: string;
 }

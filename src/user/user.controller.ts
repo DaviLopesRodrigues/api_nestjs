@@ -33,7 +33,7 @@ export class UserController {
 
   @Get(':id')
   findOne(@Param('id', ParseIntPipe) id: number) {
-    return this.userService.findOne(id)
+    return this.userService.findOne(id);
   }
 
   @Get()
@@ -46,15 +46,7 @@ export class UserController {
     @Body() body: UpdatePutUserInputDTO,
     @Param('id', ParseIntPipe) id: number,
   ) {
-    const { name, email, password } = body;
-    return {
-      body: {
-        name,
-        email,
-        password,
-      },
-      param: id,
-    };
+    return this.userService.update(id, body);
   }
 
   @Patch(':id')
@@ -62,15 +54,7 @@ export class UserController {
     @Body() body: UpdatePatchUserInputDTO,
     @Param('id', ParseIntPipe) id: number,
   ) {
-    const { name, email, password } = body;
-    return {
-      body: {
-        name,
-        email,
-        password,
-      },
-      param: id,
-    };
+    return this.userService.updatePartial(id, body);
   }
 
   @Delete(':id')
