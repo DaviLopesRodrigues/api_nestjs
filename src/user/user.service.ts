@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateUserInputDTO } from './dto/input/create-user.input.dto';
 import { PrismaService } from '@/prisma/prisma.service';
 import {
@@ -37,6 +37,7 @@ export class UserService {
 
   //Método responsável por alterar todas informações de um usuário
   async update(id: number, data: UpdatePutUserInputDTO) {
+    await this.userExists(id);
 
     return this.prismaService.user.update({
       where: {
@@ -54,11 +55,34 @@ export class UserService {
 
   //Método responsável por alterar informações específicas de um usuário
   async updatePartial(id: number, data: UpdatePatchUserInputDTO) {
+    await this.userExists(id);
+
     return this.prismaService.user.update({
       where: {
         id: id,
       },
       data,
     });
+  }
+
+  //Método responsável por deletar um usuário
+  async delete(id: number) {
+    await this.userExists(id);
+
+    return this.prismaService.user.delete({
+      where: {
+        id,
+      },
+    });
+  }
+
+  //Método criado para verificar se o usuário enviado na operação existe no banco
+  async userExists(id: number) {
+    const user = await this.findOne(id);
+
+    //Verificar se o usuário existe antes de atualizar (caso o usuário passado não exista, ocorre um erro de operação no banco)
+    if (!user) {
+      throw new NotFoundException(`Usuário ${id} não existe.`);
+    }
   }
 }
