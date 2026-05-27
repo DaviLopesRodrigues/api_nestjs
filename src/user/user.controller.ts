@@ -9,6 +9,7 @@ import {
   Post,
   Put,
   Query,
+  UseInterceptors,
 } from '@nestjs/common';
 import { CreateUserInputDTO } from './dto/input/create-user.input.dto';
 import {
@@ -16,7 +17,10 @@ import {
   UpdatePutUserInputDTO,
 } from './dto/input/update-user.input.dto';
 import { UserService } from './user.service';
+import { LogInterceptor } from '@/interceptors/log.interceptor';
 
+//Decorator responsável por instânciar a classe do interceptor personalizado e capturar os logs quando bater nos endpoints desse controller.
+@UseInterceptors(LogInterceptor) //<--
 @Controller('users')
 export class UserController {
   constructor(private readonly userService: UserService) {}
