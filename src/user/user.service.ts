@@ -78,7 +78,13 @@ export class UserService {
 
   //Método criado para verificar se o usuário enviado na operação existe no banco
   async userExists(id: number) {
-    const user = await this.findOne(id);
+    //Método para verificar quantas vezes o id do usuário se repete no banco (em teoria é só uma vez), se for 0 (falso em boolean), cai no if
+    // O count é mais rápido pois usa uma tabela de cash que sabe quantos registros existem
+    const user = await this.prismaService.user.count({
+      where: {
+        id
+      }
+    });
 
     //Verificar se o usuário existe antes de atualizar (caso o usuário passado não exista, ocorre um erro de operação no banco)
     if (!user) {
