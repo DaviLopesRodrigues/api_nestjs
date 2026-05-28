@@ -28,6 +28,8 @@ export class UserService {
 
   //Método responsável por listar único usuário.
   async findOne(id: number) {
+    await this.userExists(id);
+
     return this.prismaService.user.findUnique({
       where: {
         id,
@@ -82,8 +84,8 @@ export class UserService {
     // O count é mais rápido pois usa uma tabela de cash que sabe quantos registros existem
     const user = await this.prismaService.user.count({
       where: {
-        id
-      }
+        id,
+      },
     });
 
     //Verificar se o usuário existe antes de atualizar (caso o usuário passado não exista, ocorre um erro de operação no banco)
