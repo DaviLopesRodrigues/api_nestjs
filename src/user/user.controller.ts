@@ -18,6 +18,7 @@ import {
 } from './dto/input/update-user.input.dto';
 import { UserService } from './user.service';
 import { LogInterceptor } from '@/interceptors/log.interceptor';
+import { ParamId } from '@/decorators/param-id.decorator';
 
 //Decorator responsável por instânciar a classe do interceptor personalizado e capturar os logs quando bater nos endpoints desse controller.
 @UseInterceptors(LogInterceptor) //<--
@@ -36,7 +37,7 @@ export class UserController {
   }
 
   @Get(':id')
-  findOne(@Param('id', ParseIntPipe) id: number) {
+  findOne(@ParamId() id: number) {
     return this.userService.findOne(id);
   }
 
