@@ -38,5 +38,5 @@ export class UpdatePatchUserInputDTO {
 
   @IsOptional()
   @IsDateString()
-  birthdate: string;
+  birthdate?: string;
 }

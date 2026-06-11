@@ -15,7 +15,7 @@ import { UserIdCheckMiddleware } from '@/middlewares/user-id-check.middleware';
   imports: [PrismaModule, LogModule],
   controllers: [UserController],
   providers: [UserService],
-  exports: [],
+  exports: [UserService],
 })
 
 //Configuração do Middleware para ser utilizado no  UserModule
