@@ -23,7 +23,7 @@ export class AuthService {
   ) {}
 
   //Método responsável por criar um token JWT
-  async createTokenJwt(data: CreateTokenJwtAuthInputDTO) {
+   createTokenJwt(data: CreateTokenJwtAuthInputDTO) {
     const { id, name, email } = data;
     //Payload composto pelo id, nome e email do usuário
     const token = this.jwtService.sign(
@@ -42,7 +42,7 @@ export class AuthService {
   }
 
   //Método responsável por validar/ verificar um token JWT
-  async checkTokenJwt(token: string) {
+   checkTokenJwt(token: string) {
     try {
       const data = this.jwtService.verify(token);
 
@@ -53,9 +53,9 @@ export class AuthService {
   }
 
   //A ideia desse método é retornar uma coisa mais simples (boolean), pode ser útil em alguns momentos.
-  async isValidToken(token: string) {
+   isValidToken(token: string) {
     try {
-      await this.checkTokenJwt(token);
+       this.checkTokenJwt(token);
       return true;
     } catch (error) {
       return false;
