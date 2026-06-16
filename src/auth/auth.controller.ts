@@ -6,6 +6,7 @@ import { ForgetAuthInputDTO } from './dto/input/forget-auth.input.dto';
 import { ResetAuthInputDTO } from './dto/input/reset-auth.input.dto';
 import { AuthGuard } from '@/guards/auth.guard';
 import { UserService } from '@/user/user.service';
+import { User } from '@/decorators/user.decorator';
 
 @Controller('auth')
 export class AuthController {
@@ -38,11 +39,10 @@ export class AuthController {
     return this.authService.resetPassword(body);
   }
 
+  //Método responsável por retornar as informações pessoais do usuário.
   @UseGuards(AuthGuard)
   @Post('me')
-  async me(@Req() request) {
-    const { id } = request.payload;
-
-    return this.userService.findOne(id);
+  async me(@User() user) {
+    return {user};
   }
 }
