@@ -15,6 +15,8 @@ model User {
   email      String    @db.VarChar(127)
   password   String    @db.VarChar(127)
   birthdate  DateTime? @db.Date
+  //Criei a coluna role na tabela de tb_users e por padrão terá a role USER
+  role       String    @default("USER")
   created_at DateTime  @default(now()) @db.Timestamp(0)
   updated_at DateTime  @default(now()) @db.Timestamp(0)
 

@@ -51,6 +51,7 @@ export class UserService {
         password: data.password,
         //Como a prop birthdate é opcional, quando não vier será salva como null no banco (boa prática)
         birthdate: data.birthdate ? data.birthdate : null,
+        role: data.role
       },
     });
   }

@@ -1,4 +1,5 @@
 import {
+  forwardRef,
   MiddlewareConsumer,
   Module,
   NestModule,
@@ -9,10 +10,11 @@ import { UserService } from './user.service';
 import { PrismaModule } from '@/prisma/prisma.module';
 import { LogModule } from '@/log/log.module';
 import { UserIdCheckMiddleware } from '@/middlewares/user-id-check.middleware';
+import { AuthModule } from '@/auth/auth.module';
 
 @Module({
   //Importação do PrismaModule que exposta o PrismaService (é necessário pois uso no UserService)
-  imports: [PrismaModule, LogModule],
+  imports: [PrismaModule, LogModule, forwardRef(() => AuthModule)], //forwardRef responsável por corrigir o problema de circular dependency
   controllers: [UserController],
   providers: [UserService],
   exports: [UserService],

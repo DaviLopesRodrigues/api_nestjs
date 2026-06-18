@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { AuthService } from './auth.service';
@@ -17,8 +17,8 @@ import { PrismaModule } from '@/prisma/prisma.module';
         signOptions: { expiresIn: '7d' },
       }),
     }),
-    UserModule,
-    PrismaModule
+    forwardRef(() => UserModule), //forwardRef responsável por corrigir o problema de circular dependency
+    PrismaModule,
   ],
   controllers: [AuthController],
   providers: [AuthService],

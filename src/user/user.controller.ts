@@ -9,6 +9,7 @@ import {
   Post,
   Put,
   Query,
+  UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 import { CreateUserInputDTO } from './dto/input/create-user.input.dto';
@@ -19,9 +20,15 @@ import {
 import { UserService } from './user.service';
 import { LogInterceptor } from '@/interceptors/log.interceptor';
 import { ParamId } from '@/decorators/param-id.decorator';
+import { Roles } from '@/decorators/roles.decorator';
+import { Role } from '@/enums/role.enum';
+import { AuthGuard } from '@/guards/auth.guard';
+import { RoleGuard } from '@/guards/role.guard';
 
+@UseGuards(AuthGuard, RoleGuard)
 //Decorator responsável por instânciar a classe do interceptor personalizado e capturar os logs quando bater nos endpoints desse controller.
-@UseInterceptors(LogInterceptor) //<--
+@UseInterceptors(LogInterceptor)
+@Roles(Role.ADMIN) //Para bater em qualquer método o usuário tem que ter a role ADMIN
 @Controller('users')
 export class UserController {
   constructor(private readonly userService: UserService) {}

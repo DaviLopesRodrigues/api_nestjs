@@ -1,6 +1,8 @@
+import { Role } from '@/enums/role.enum';
 import {
   IsDateString,
   IsEmail,
+  IsEnum,
   IsOptional,
   IsString,
   IsStrongPassword,
@@ -20,6 +22,9 @@ export class UpdatePutUserInputDTO {
 
   @IsDateString()
   birthdate: string;
+
+  @IsEnum(Role)
+  role: string;
 }
 
 export class UpdatePatchUserInputDTO {
@@ -39,4 +44,8 @@ export class UpdatePatchUserInputDTO {
   @IsOptional()
   @IsDateString()
   birthdate?: string;
+
+  @IsOptional()
+  @IsEnum(Role)
+  role?: string;
 }
