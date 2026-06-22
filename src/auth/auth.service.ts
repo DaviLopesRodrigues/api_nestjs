@@ -13,6 +13,7 @@ import { ResetAuthInputDTO } from './dto/input/reset-auth.input.dto';
 import { RegisterAuthInputDTO } from './dto/input/register-auth.input.dto';
 import { VerifyUserAuthInputDTO } from './dto/input/verify-user-auth.input.dto';
 import { CreateTokenJwtAuthInputDTO } from './dto/input/create-token-jwt-auth.input.dto';
+import { CryptoService } from '@/crypto/crypto.service';
 
 @Injectable()
 export class AuthService {
@@ -20,10 +21,11 @@ export class AuthService {
     private readonly jwtService: JwtService,
     private readonly userService: UserService,
     private readonly prismaService: PrismaService,
+    private readonly cryptoService: CryptoService,
   ) {}
 
   //Método responsável por criar um token JWT
-   createTokenJwt(data: CreateTokenJwtAuthInputDTO) {
+  createTokenJwt(data: CreateTokenJwtAuthInputDTO) {
     const { id, name, email } = data;
     //Payload composto pelo id, nome e email do usuário
     const token = this.jwtService.sign(
@@ -42,7 +44,7 @@ export class AuthService {
   }
 
   //Método responsável por validar/ verificar um token JWT
-   checkTokenJwt(token: string) {
+  checkTokenJwt(token: string) {
     try {
       const data = this.jwtService.verify(token);
 
@@ -53,9 +55,9 @@ export class AuthService {
   }
 
   //A ideia desse método é retornar uma coisa mais simples (boolean), pode ser útil em alguns momentos.
-   isValidToken(token: string) {
+  isValidToken(token: string) {
     try {
-       this.checkTokenJwt(token);
+      this.checkTokenJwt(token);
       return true;
     } catch (error) {
       return false;
@@ -66,11 +68,14 @@ export class AuthService {
   async login(data: LoginAuthInputDTO) {
     const { email, password } = data;
 
-    const user = await this.verifyUser({ email, password });
+    const user = await this.verifyUser({ email });
 
     if (!user) {
       throw new UnauthorizedException('E-mail e/ou senha incorretos.');
     }
+
+    //Chamando o método para verificar se a senha enviada no login e a senha salva no banco estão batendo
+    await this.cryptoService.compareHash(password, user.password);
 
     //Ao fazer o login o usuário recebe um JWT
     return this.createTokenJwt({
