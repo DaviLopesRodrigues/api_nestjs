@@ -18,7 +18,7 @@ import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
         },
       ],
     }),
-    ConfigModule.forRoot({ isGlobal: true }),
+    ConfigModule.forRoot({ isGlobal: true }), //Configuração do ConfigModule na aplicação
     PrismaModule,
     UserModule,
     LogModule,

@@ -14,7 +14,7 @@ import { CryptoModule } from '@/crypto/crypto.module';
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
-        secret: configService.get<string>('JWT_SECRET_KEY'),
+        secret: configService.get<string>('JWT_SECRET_KEY'), //Utilização da variável de ambiente através do ConfigService
         signOptions: { expiresIn: '7d' },
       }),
     }),
