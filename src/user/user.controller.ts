@@ -2,8 +2,11 @@ import {
   Body,
   Controller,
   Delete,
+  FileTypeValidator,
   Get,
+  MaxFileSizeValidator,
   Param,
+  ParseFilePipe,
   ParseIntPipe,
   Patch,
   Post,
@@ -49,7 +52,19 @@ export class UserController {
   @UseInterceptors(FileInterceptor('avatar'))
   @Post('avatar')
   //O decorator @UploadedFile é o responsável por "capturar" o file enviado na requisição
-  uploadAvatar(@User() user, @UploadedFile() avatar: Express.Multer.File) {
+  uploadAvatar(
+    @User() user,
+    @UploadedFile(
+      new ParseFilePipe({
+        //Método responsável por conter pipes para validação de arquivos
+        validators: [
+          new FileTypeValidator({ fileType: /^image\/(png|jpeg)$/ , errorMessage: "Extensão de arquivo inválida."}), //Pipe faz com que só arquivos .png ou .jpeg sejam aceitos
+          new MaxFileSizeValidator({maxSize: 1024 * 50})//Pipe define um tamanho máximo dos arquivos enviados (1 Kilobyte = 1024 Byte)
+        ],
+      }),
+    )
+    avatar: Express.Multer.File,
+  ) {
     return this.fileService.uploadAvater(avatar, user.id);
   }
 
