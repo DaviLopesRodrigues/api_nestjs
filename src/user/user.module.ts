@@ -12,6 +12,7 @@ import { LogModule } from '@/log/log.module';
 import { UserIdCheckMiddleware } from '@/middlewares/user-id-check.middleware';
 import { AuthModule } from '@/auth/auth.module';
 import { CryptoModule } from '@/crypto/crypto.module';
+import { FileModule } from '@/file/file.module';
 
 @Module({
   //Importação do PrismaModule que exposta o PrismaService (é necessário pois uso no UserService)
@@ -20,19 +21,12 @@ import { CryptoModule } from '@/crypto/crypto.module';
     LogModule,
     forwardRef(() => AuthModule),
     CryptoModule,
+    FileModule
   ], //forwardRef responsável por corrigir o problema de circular dependency
   controllers: [UserController],
   providers: [UserService],
   exports: [UserService],
 })
 
-//Configuração do Middleware para ser utilizado no  UserModule
-export class UserModule implements NestModule {
-  configure(consumer: MiddlewareConsumer) {
-    //Aplicando o UserIdCheckMiddleware no UserModule somente para as rotas que pedem o id no path
-    consumer.apply(UserIdCheckMiddleware).forRoutes({
-      path: 'users/:id',
-      method: RequestMethod.ALL,
-    });
-  }
-}
+//Configuração do Middleware para ser utilizado no  UserModule (precise)
+export class UserModule {}

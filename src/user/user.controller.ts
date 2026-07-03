@@ -9,6 +9,7 @@ import {
   Post,
   Put,
   Query,
+  UploadedFile,
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
@@ -24,6 +25,9 @@ import { Roles } from '@/decorators/roles.decorator';
 import { Role } from '@/enums/role.enum';
 import { AuthGuard } from '@/guards/auth.guard';
 import { RoleGuard } from '@/guards/role.guard';
+import { User } from '@/decorators/user.decorator';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { FileService } from '@/file/file.service';
 
 @UseGuards(AuthGuard, RoleGuard)
 //Decorator responsável por instânciar a classe do interceptor personalizado e capturar os logs quando bater nos endpoints desse controller.
@@ -31,11 +35,22 @@ import { RoleGuard } from '@/guards/role.guard';
 @Roles(Role.ADMIN) //Para bater em qualquer método o usuário tem que ter a role ADMIN
 @Controller('users')
 export class UserController {
-  constructor(private readonly userService: UserService) {}
+  constructor(
+    private readonly userService: UserService,
+    private readonly fileService: FileService,
+  ) {}
 
   @Post()
   create(@Body() body: CreateUserInputDTO) {
     return this.userService.create(body);
+  }
+
+  //Como estamos usando o Multer, precisamos chamar o FileInterceptor passando o nome na propriedade enviada no form
+  @UseInterceptors(FileInterceptor('avatar'))
+  @Post('avatar')
+  //O decorator @UploadedFile é o responsável por "capturar" o file enviado na requisição
+  uploadAvatar(@User() user, @UploadedFile() avatar: Express.Multer.File) {
+    return this.fileService.uploadAvater(avatar, user.id);
   }
 
   @Get()

@@ -6,6 +6,7 @@ import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
 import { CryptoModule } from './crypto/crypto.module';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
+import { FileModule } from './file/file.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
     LogModule,
     AuthModule,
     CryptoModule,
+    FileModule,
   ],
   controllers: [],
   //Definindo o Throttler de forma global na API (mas é possível adicionar de forma local, por cima do controller todo ou endpoint específico)
