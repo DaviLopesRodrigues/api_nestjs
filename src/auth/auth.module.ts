@@ -6,6 +6,7 @@ import { AuthController } from './auth.controller';
 import { UserModule } from '@/user/user.module';
 import { PrismaModule } from '@/prisma/prisma.module';
 import { CryptoModule } from '@/crypto/crypto.module';
+import { MailModule } from '@/mail/mail.module';
 
 //O Módulo Auth faz a importação e configuração do módulo JWT
 @Module({
@@ -21,6 +22,7 @@ import { CryptoModule } from '@/crypto/crypto.module';
     forwardRef(() => UserModule), //forwardRef responsável por corrigir o problema de circular dependency
     PrismaModule,
     CryptoModule,
+    MailModule
   ],
   controllers: [AuthController],
   providers: [AuthService],

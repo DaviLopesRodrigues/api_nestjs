@@ -7,6 +7,7 @@ import { AuthModule } from './auth/auth.module';
 import { CryptoModule } from './crypto/crypto.module';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { FileModule } from './file/file.module';
+import { MailModule } from './mail/mail.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { FileModule } from './file/file.module';
     AuthModule,
     CryptoModule,
     FileModule,
+    MailModule
   ],
   controllers: [],
   //Definindo o Throttler de forma global na API (mas é possível adicionar de forma local, por cima do controller todo ou endpoint específico)

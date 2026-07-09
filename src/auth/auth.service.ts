@@ -3,10 +3,12 @@ import { UserService } from '@/user/user.service';
 import {
   BadRequestException,
   ConflictException,
+  HttpException,
   Injectable,
+  InternalServerErrorException,
   UnauthorizedException,
 } from '@nestjs/common';
-import { JwtService, TokenExpiredError } from '@nestjs/jwt';
+import { JwtService } from '@nestjs/jwt';
 import { LoginAuthInputDTO } from './dto/input/login-auth.input.dto';
 import { ForgetAuthInputDTO } from './dto/input/forget-auth.input.dto';
 import { ResetAuthInputDTO } from './dto/input/reset-auth.input.dto';
@@ -14,6 +16,7 @@ import { RegisterAuthInputDTO } from './dto/input/register-auth.input.dto';
 import { VerifyUserAuthInputDTO } from './dto/input/verify-user-auth.input.dto';
 import { CreateTokenJwtAuthInputDTO } from './dto/input/create-token-jwt-auth.input.dto';
 import { CryptoService } from '@/crypto/crypto.service';
+import { MailService } from '@/mail/mail.service';
 
 @Injectable()
 export class AuthService {
@@ -22,6 +25,7 @@ export class AuthService {
     private readonly userService: UserService,
     private readonly prismaService: PrismaService,
     private readonly cryptoService: CryptoService,
+    private readonly mailService: MailService,
   ) {}
 
   //Método responsável por criar um token JWT
@@ -105,34 +109,62 @@ export class AuthService {
 
   //Método responsável pela solicitação de redefinição de senha
   async forgetPassword(data: ForgetAuthInputDTO) {
-    const { email } = data;
+    try {
+      const { email } = data;
 
-    const user = await this.verifyUser({ email });
+      const user = await this.verifyUser({ email });
 
-    if (!user) {
-      throw new UnauthorizedException('E-mail incorreto.');
+      if (!user) {
+        throw new UnauthorizedException('E-mail incorreto.');
+      }
+
+      //Se po usuário existir (for válido) crio um token JWT com as informações dele
+      const token = this.createTokenJwt({
+        id: user.id,
+        name: user.name,
+        email: user.email,
+      });
+
+      //Passo as propriedades necessárias para o envio do email no método
+      await this.mailService.sendEmail(
+        user.email,
+        'Recuperação de Senha',
+        'forget-password-template',
+        { name: user.name, token: token.accessToken },
+      );
+
+      return true;
+    } catch (error) {
+      if (error instanceof HttpException) {
+        throw error;
+      }
     }
-
-    //TO DO: Enviar email com código para o usuário
-
-    return true;
+    throw new InternalServerErrorException(
+      'Ocorreu um erro ao processar a recuperação de senha.',
+    );
   }
 
   //Método responsável pela redefinição de senha
   async resetPassword(data: ResetAuthInputDTO) {
-    const { password, token } = data;
+    //Recebo a nova senha e o token enviado no email para alterar senha de um usuário
 
-    //TO DO: Validar o token enviado para o usuário
+    const user = await this.checkTokenJwt(data.token);
 
-    const id = 0;
+    if (!user) {
+      throw new BadRequestException('Token inválido.');
+    }
 
-    const user = await this.userService.updatePartial(id, { password });
+    data.password = await this.cryptoService.generateHash(data.password);
+
+    const userUpdated = await this.userService.updatePartial(user.id, {
+      password: data.password,
+    });
 
     //Ao fazer o reset da senha o usuário recebe um JWT
     return this.createTokenJwt({
-      id: user.id,
-      email: user.email,
-      name: user.name,
+      id: userUpdated.id,
+      email: userUpdated.email,
+      name: userUpdated.name,
     });
   }
 
