@@ -1,4 +1,4 @@
-import { LogService } from '@/log/log.service';
+import { LogService } from '../log/log.service';
 import { CallHandler, ExecutionContext, Injectable, NestInterceptor } from '@nestjs/common';
 import { Observable, tap } from 'rxjs';
 

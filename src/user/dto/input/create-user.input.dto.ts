@@ -1,11 +1,10 @@
-import { Role } from '@/enums/role.enum';
+import { Role } from '../../../enums/role.enum';
 import {
   IsDateString,
   IsEmail,
   IsEnum,
   IsOptional,
   IsString,
-  IsStrongPassword,
   MinLength,
 } from 'class-validator';
 

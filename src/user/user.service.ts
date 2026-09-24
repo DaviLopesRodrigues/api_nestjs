@@ -1,11 +1,12 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateUserInputDTO } from './dto/input/create-user.input.dto';
-import { PrismaService } from '@/prisma/prisma.service';
+import { PrismaService } from '../prisma/prisma.service';
 import {
   UpdatePatchUserInputDTO,
   UpdatePutUserInputDTO,
 } from './dto/input/update-user.input.dto';
-import { CryptoService } from '@/crypto/crypto.service';
+import { CryptoService } from '../crypto/crypto.service';
+
 
 //O service é responsável por se conectar com Banco de Dados e realizar as operações
 @Injectable()

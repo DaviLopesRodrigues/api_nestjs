@@ -1,5 +1,5 @@
-import { ROLES_KEY } from '@/decorators/roles.decorator';
-import { Role } from '@/enums/role.enum';
+import { ROLES_KEY } from '../decorators/roles.decorator';
+import { Role } from '../enums/role.enum';
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 

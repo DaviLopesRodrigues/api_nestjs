@@ -4,15 +4,13 @@ import { LoginAuthInputDTO } from './dto/input/login-auth.input.dto';
 import { RegisterAuthInputDTO } from './dto/input/register-auth.input.dto';
 import { ForgetAuthInputDTO } from './dto/input/forget-auth.input.dto';
 import { ResetAuthInputDTO } from './dto/input/reset-auth.input.dto';
-import { AuthGuard } from '@/guards/auth.guard';
-import { UserService } from '@/user/user.service';
-import { User } from '@/decorators/user.decorator';
+import { AuthGuard } from '../guards/auth.guard';
+import { User } from '../decorators/user.decorator';
 
 @Controller('auth')
 export class AuthController {
   constructor(
     private readonly authService: AuthService,
-    private readonly userService: UserService,
   ) {}
 
   //Método responsável pelo login de um usuário

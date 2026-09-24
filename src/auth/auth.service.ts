@@ -1,5 +1,3 @@
-import { PrismaService } from '@/prisma/prisma.service';
-import { UserService } from '@/user/user.service';
 import {
   BadRequestException,
   ConflictException,
@@ -15,8 +13,10 @@ import { ResetAuthInputDTO } from './dto/input/reset-auth.input.dto';
 import { RegisterAuthInputDTO } from './dto/input/register-auth.input.dto';
 import { VerifyUserAuthInputDTO } from './dto/input/verify-user-auth.input.dto';
 import { CreateTokenJwtAuthInputDTO } from './dto/input/create-token-jwt-auth.input.dto';
-import { CryptoService } from '@/crypto/crypto.service';
-import { MailService } from '@/mail/mail.service';
+import { PrismaService } from '../prisma/prisma.service';
+import { UserService } from '../user/user.service';
+import { CryptoService } from '../crypto/crypto.service';
+import { MailService } from '../mail/mail.service';
 
 @Injectable()
 export class AuthService {
