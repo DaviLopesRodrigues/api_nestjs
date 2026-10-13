@@ -20,7 +20,7 @@ import { MailModule } from './mail/mail.module';
         },
       ],
     }),
-    ConfigModule.forRoot({ isGlobal: true }), //Configuração do ConfigModule na aplicação
+    ConfigModule.forRoot({ isGlobal: true, envFilePath:   process.env.ENV === 'test' ? '.env.test' : '.env' }), //Configuração do ConfigModule na aplicação
     PrismaModule,
     UserModule,
     LogModule,

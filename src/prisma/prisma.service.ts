@@ -1,7 +1,6 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
 import { PrismaMariaDb } from '@prisma/adapter-mariadb';
 import { PrismaClient } from '@prisma/client';
-
 //Configurei esse service com base na documentação do Nest
 @Injectable()
 export class PrismaService extends PrismaClient implements OnModuleInit {
@@ -14,5 +13,10 @@ export class PrismaService extends PrismaClient implements OnModuleInit {
   //Método responsável por iniciar conexão com o Banco de Dados.
   async onModuleInit(): Promise<void> {
     await this.$connect();
+  }
+
+  // Método responsável por encerrar a conexão com o banco ao fechar o módulo NestJS
+  async onModuleDestroy(): Promise<void> {
+    await this.$disconnect();
   }
 }
